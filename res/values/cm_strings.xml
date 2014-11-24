@@ -61,6 +61,12 @@
     <string name="privacy_guard_manager_show_system_apps">Show built-in apps</string>
     <string name="privacy_guard_advanced_settings_title">Advanced</string>
 
+    <!-- Per app controls for LP keyguard notifications -->
+    <string name="app_notification_show_on_keyguard_title">Show on lockscreen</string>
+    <string name="app_notification_show_on_keyguard_summary">Show notifications from this app on the lockscreen</string>
+    <string name="app_notification_no_ongoing_on_keyguard_title">Disable persistent notification on lockscreen</string>
+    <string name="app_notification_no_ongoing_on_keyguard_summary">Never show persistent notifications from this app on the lockscreen</string>
+
     <!-- App ops -->
     <string name="app_ops_summaries_coarse_location">coarse location</string>
     <string name="app_ops_summaries_fine_location">fine location</string>
