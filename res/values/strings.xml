@@ -6052,4 +6052,7 @@
    <string name="imei_information_summary">IMEI relative information</string>
    <string name="slot_number">(Slot<xliff:g id="slot_num">%1$d</xliff:g>)</string>
 
+   <!-- Nav bar alignment -->
+    <string name="ui_mode_title">Left Navigation Bar</string>
+    <string name="ui_mode_summary">Align the navigation bar to the left side of the screen.</string>
 </resources>

@@ -87,4 +87,9 @@
                 android:title="@string/power_menu_expanded_desktop"
                 android:fragment="com.android.settings.applications.ExpandedDesktopPreferenceFragment" />
 
+        <SwitchPreference
+                android:key="ui_mode"
+                android:title="@string/ui_mode_title"
+                android:summary="@string/ui_mode_summary" />
+
 </PreferenceScreen>

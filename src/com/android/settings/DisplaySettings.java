@@ -24,6 +24,7 @@ import com.android.settings.search.Indexable;
 
 import static android.provider.Settings.Secure.DOZE_ENABLED;
 import static android.provider.Settings.Secure.WAKE_GESTURE_ENABLED;
+import static android.provider.Settings.Secure.UI_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
@@ -70,6 +71,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_DOZE = "doze";
     private static final String KEY_AUTO_BRIGHTNESS = "auto_brightness";
     private static final String KEY_AUTO_ROTATE = "auto_rotate";
+    private static final String KEY_UI_MODE = "ui_mode";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -82,6 +84,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mLiftToWakePreference;
     private SwitchPreference mDozePreference;
     private SwitchPreference mAutoBrightnessPreference;
+
+    private SwitchPreference mUiMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,6 +169,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         } else {
             removePreference(KEY_AUTO_ROTATE);
         }
+
+        mUiMode = (SwitchPreference) findPreference(KEY_UI_MODE);
+        mUiMode.setOnPreferenceChangeListener(this);
     }
 
     private static boolean allowAllRotations(Context context) {
@@ -330,6 +337,11 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             int value = Settings.Secure.getInt(getContentResolver(), DOZE_ENABLED, 1);
             mDozePreference.setChecked(value != 0);
         }
+
+        if (mUiMode != null) {
+            int value = Settings.Secure.getInt(getContentResolver(), UI_MODE, 0);
+            mUiMode.setChecked(value != 0);
+        }
     }
 
     private void updateScreenSaverSummary() {
@@ -380,6 +392,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         if (preference == mDozePreference) {
             boolean value = (Boolean) objValue;
             Settings.Secure.putInt(getContentResolver(), DOZE_ENABLED, value ? 1 : 0);
+        }
+        if (preference == mUiMode) {
+            boolean value = (Boolean) objValue;
+            Settings.Secure.putInt(getContentResolver(), UI_MODE, value ? 1 : 0);
         }
         return true;
     }
