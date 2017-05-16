@@ -115,6 +115,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String ENABLE_ADB = "enable_adb";
     private static final String CLEAR_ADB_KEYS = "clear_adb_keys";
     private static final String ENABLE_TERMINAL = "enable_terminal";
+    private static final String TCG_ARM_PROPERTY = "persist.tcg.mode";
     private static final String KEEP_SCREEN_ON = "keep_screen_on";
     private static final String BT_HCI_SNOOP_LOG = "bt_hci_snoop_log";
     private static final String WEBVIEW_PROVIDER_KEY = "select_webview_provider";
@@ -190,6 +191,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String KEY_COLOR_MODE = "color_mode";
     private static final String FORCE_RESIZABLE_KEY = "force_resizable_activities";
     private static final String COLOR_TEMPERATURE_KEY = "color_temperature";
+    private static final String TCG_ARM_KEY = "tcg_arm";
 
     private static final String BLUETOOTH_DISABLE_ABSOLUTE_VOLUME_KEY =
                                     "bluetooth_disable_absolute_volume";
@@ -249,6 +251,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private SwitchPreference mEnableTerminal;
     private Preference mBugreport;
     private SwitchPreference mBugreportInPower;
+    private SwitchPreference mTcgArm;
     private RestrictedSwitchPreference mKeepScreenOn;
     private SwitchPreference mBtHciSnoopLog;
     private RestrictedSwitchPreference mEnableOemUnlock;
@@ -385,6 +388,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
 
         mBugreport = findPreference(BUGREPORT);
         mBugreportInPower = findAndInitSwitchPref(BUGREPORT_IN_POWER_KEY);
+        mTcgArm = findAndInitSwitchPref(TCG_ARM_KEY);
         mKeepScreenOn = (RestrictedSwitchPreference) findAndInitSwitchPref(KEEP_SCREEN_ON);
         mBtHciSnoopLog = findAndInitSwitchPref(BT_HCI_SNOOP_LOG);
         mEnableOemUnlock = (RestrictedSwitchPreference) findAndInitSwitchPref(ENABLE_OEM_UNLOCK);
@@ -691,6 +695,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                 Settings.Global.DEBUG_VIEW_ATTRIBUTES, 0) != 0);
         updateSwitchPreference(mForceAllowOnExternal, Settings.Global.getInt(cr,
                 Settings.Global.FORCE_ALLOW_ON_EXTERNAL, 0) != 0);
+        updateTcgArmOption();
         updateHdcpValues();
         updatePasswordSummary();
         updateDebuggerOptions();
@@ -1847,6 +1852,15 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                 getActivity().getContentResolver(), Settings.Secure.ANR_SHOW_BACKGROUND, 0) != 0);
     }
 
+    private void updateTcgArmOption() {
+        String prop = SystemProperties.get(TCG_ARM_PROPERTY, "global");
+        mTcgArm.setChecked("global".equals(prop));
+    }
+
+    private void writeTcgArmOption() {
+        SystemProperties.set(TCG_ARM_PROPERTY, mTcgArm.isChecked() ? "global" : "disabled");
+    }
+
     private void confirmEnableOemUnlock() {
         DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -1972,6 +1986,8 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                     Settings.Global.BUGREPORT_IN_POWER_MENU,
                     mBugreportInPower.isChecked() ? 1 : 0);
             setBugreportStorageProviderStatus();
+        } else if (preference == mTcgArm) {
+            writeTcgArmOption();
         } else if (preference == mKeepScreenOn) {
             Settings.Global.putInt(getActivity().getContentResolver(),
                     Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
