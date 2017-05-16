@@ -34,6 +34,11 @@
                 android:targetClass="com.android.settings.SetFullBackupPassword" />
     </Preference>
 
+    <SwitchPreference
+        android:key="tcg_arm"
+        android:title="@string/tcg_arm"
+        android:summary="@string/tcg_arm_summary"/>
+
     <com.android.settingslib.RestrictedSwitchPreference
         android:key="keep_screen_on"
         android:title="@string/keep_screen_on"
