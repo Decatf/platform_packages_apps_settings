@@ -70,8 +70,10 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
         mTimeFormatter = android.text.format.DateFormat.getTimeFormat(context);
         mTimeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        mTemperaturePreference.setMax(convertTemperature(mController.getMinimumColorTemperature()));
-        mTemperaturePreference.setContinuousUpdates(true);
+        if (mTemperaturePreference != null) {
+            mTemperaturePreference.setMax(convertTemperature(mController.getMinimumColorTemperature()));
+            mTemperaturePreference.setContinuousUpdates(true);
+        }
     }
 
     @Override
@@ -91,6 +93,9 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
         mEndTimePreference = findPreference(KEY_NIGHT_DISPLAY_END_TIME);
         mActivatedPreference = (TwoStatePreference) findPreference(KEY_NIGHT_DISPLAY_ACTIVATED);
         mTemperaturePreference = (SeekBarPreference) findPreference(KEY_NIGHT_DISPLAY_TEMPERATURE);
+        removePreference(KEY_NIGHT_DISPLAY_TEMPERATURE);
+        mTemperaturePreference = null;
+
 
         mAutoModePreference.setEntries(new CharSequence[] {
                 getString(R.string.night_display_auto_mode_never),
@@ -104,7 +109,8 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
         });
         mAutoModePreference.setOnPreferenceChangeListener(this);
         mActivatedPreference.setOnPreferenceChangeListener(this);
-        mTemperaturePreference.setOnPreferenceChangeListener(this);
+        if (mTemperaturePreference != null)
+            mTemperaturePreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -185,7 +191,8 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
     @Override
     public void onActivated(boolean activated) {
         mActivatedPreference.setChecked(activated);
-        mTemperaturePreference.setEnabled(activated);
+        if (mTemperaturePreference != null)
+            mTemperaturePreference.setEnabled(activated);
     }
 
     @Override
@@ -199,7 +206,8 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
 
     @Override
     public void onColorTemperatureChanged(int colorTemperature) {
-        mTemperaturePreference.setProgress(convertTemperature(colorTemperature));
+        if (mTemperaturePreference != null)
+            mTemperaturePreference.setProgress(convertTemperature(colorTemperature));
     }
 
     private String getFormattedTimeString(LocalTime localTime) {
