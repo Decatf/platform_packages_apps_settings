@@ -25,12 +25,13 @@ import android.widget.Toast;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
-import com.android.settings.core.PreferenceController;
+import com.android.settings.core.PreferenceControllerMixin;
+import com.android.settingslib.core.AbstractPreferenceController;
 
 import static com.android.internal.os.MemoryPowerCalculator.TAG;
 
-public class WifiSleepPolicyPreferenceController extends PreferenceController implements
-        Preference.OnPreferenceChangeListener {
+public class WifiSleepPolicyPreferenceController extends AbstractPreferenceController
+        implements PreferenceControllerMixin, Preference.OnPreferenceChangeListener {
 
     private static final String KEY_SLEEP_POLICY = "sleep_policy";
 
